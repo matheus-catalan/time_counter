@@ -5,65 +5,156 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contador de Tempo</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #add8e6;
-      /* Azul Bebê */
-    }
 
-    #timer {
-      font-size: 1.5em;
-      text-align: center;
-    }
+  <head>
+    <style>
+      /* general styling */
+      :root {
+        --smaller: .75;
+      }
 
-    span {
-      font-size: 2.5em;
-      margin-top: 1em;
-    }
-  </style>
-</head>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+
+      body {
+        align-items: center;
+        background-color: #add8e6;
+        display: flex;
+        font-family: -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          Oxygen-Sans,
+          Ubuntu,
+          Cantarell,
+          "Helvetica Neue",
+          sans-serif;
+      }
+
+      .container {
+        color: #f0f0f0;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      #countdown {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+        max-width: 600px;
+        min-height: 300px;
+        background-color: #354051;
+        border-radius: 30px;
+        /* box-shadow: 0 0 20px 0px rgb(52, 64, 80, .4); */
+        box-shadow: inset 0 0 10px #000000;
+
+      }
+
+      h1 {
+        font-weight: normal;
+        letter-spacing: .125rem;
+        text-transform: uppercase;
+      }
+
+      li {
+        display: inline-block;
+        font-size: 1.5em;
+        list-style-type: none;
+        padding: 1em;
+        text-transform: uppercase;
+      }
+
+      li span {
+        display: block;
+        font-size: 4.5rem;
+      }
+
+      .emoji {
+        display: none;
+        padding: 1rem;
+      }
+
+      .emoji span {
+        font-size: 4rem;
+        padding: 0 .5rem;
+      }
+
+      @media all and (max-width: 768px) {
+        h1 {
+          font-size: calc(1.5rem * var(--smaller));
+        }
+
+        li {
+          font-size: calc(1.125rem * var(--smaller));
+        }
+
+        li span {
+          font-size: calc(3.375rem * var(--smaller));
+        }
+      }
+    </style>
+  </head>
 
 <body>
-  <div class="flex">
-    <span>Tempo até as ferias</span>
-    <div id="timer"></div>
+  <div class="container">
+    <div id="countdown">
+      <ul>
+        <li><span id="days"></span>days</li>
+        <li><span id="hours"></span>Hours</li>
+        <li><span id="minutes"></span>Minutes</li>
+        <li><span id="seconds"></span>Seconds</li>
+      </ul>
+    </div>
+    <div id="content" class="emoji">
+      <span>🥳</span>
+      <span>🎉</span>
+      <span>🎂</span>
+    </div>
+    <script>
+      const second = 1000,
+        minute = second * 60,
+        hour = minute * 60,
+        day = hour * 24;
+
+      //I'm adding this section so I don't have to keep updating this pen every year :-)
+      //remove this if you don't need it
+      var birthday = new Date("January 13, 2024 18:00:00").getTime();
+
+      //end
+
+      const countDown = new Date(birthday).getTime(),
+        x = setInterval(function () {
+
+          const now = new Date().getTime(),
+            distance = countDown - now;
+
+          document.getElementById("days").innerText = Math.floor(distance / (day)),
+            document.getElementById("hours").innerText = Math.floor((distance % (day)) / (hour)),
+            document.getElementById("minutes").innerText = Math.floor((distance % (hour)) / (minute)),
+            document.getElementById("seconds").innerText = Math.floor((distance % (minute)) / second);
+
+          //do something later when date is reached
+          if (distance < 0) {
+            document.getElementById("headline").innerText = "It's free!";
+            document.getElementById("countdown").style.display = "none";
+            document.getElementById("content").style.display = "block";
+            clearInterval(x);
+          }
+          //seconds
+        }, 0)
+
+    </script>
   </div>
-
-  <script>
-    // Data alvo (13 de janeiro de 2024 às 18:00)
-    var targetDate = new Date("January 13, 2024 18:00:00").getTime();
-
-    // Atualiza o contador a cada segundo
-    var x = setInterval(function () {
-
-      // Data atual
-      var currentDate = new Date().getTime();
-
-      // Diferença entre a data alvo e a data atual
-      var timeDifference = targetDate - currentDate;
-
-      var days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-      var hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      var minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-      // Exibe o contador no elemento com id "timer"
-      document.getElementById("timer").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-
-      // Se a contagem regressiva terminar, exibe uma mensagem
-      if (timeDifference < 0) {
-        clearInterval(x);
-        document.getElementById("timer").innerHTML = "O tempo expirou!";
-      }
-    }, 1000);
-  </script>
-
 </body>
 
 </html>
